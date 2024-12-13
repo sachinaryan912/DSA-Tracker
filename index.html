@@ -18,18 +18,39 @@
             text-align: center;
             padding: 1rem;
             background: linear-gradient(135deg, #6a11cb, #2575fc);
-            animation: gradient 5s infinite alternate;
+            /* animation: gradient 5s infinite alternate; */
         }
 
-        @keyframes gradient {
+        /* @keyframes gradient {
             0% { background: linear-gradient(135deg, #6a11cb, #2575fc); }
             100% { background: linear-gradient(135deg, #2575fc, #6a11cb); }
-        }
+        } */
 
         header h1 {
             margin: 0;
             font-size: 2rem;
             color: #ffffff;
+        }
+
+        .streak {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-weight: bold;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            font-size: 1.8rem;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            align-content: center;
+        }
+
+        .streak span {
+            margin-left: 0px;
+            
         }
 
         .container {
@@ -64,8 +85,7 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 4px;
-            width: 0;
+            height: 6px;
             background-color: #2575fc;
             transition: width 0.3s ease-in-out;
             z-index: 0;
@@ -160,6 +180,7 @@
         }
 
         .dialog {
+            width: 20dvw;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -193,7 +214,7 @@
             font-size: 1rem;
         }
 
-        .dialog button {
+        .dialog a button {
             margin-top: 1rem;
             padding: 0.5rem 1rem;
             background-color: #2575fc;
@@ -202,6 +223,18 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #5c5a5a;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
         }
 
         footer {
@@ -223,6 +256,10 @@
     <h1>DSA Problem Tracker</h1>
 </header>
 
+<div class="streak">
+    <span>🔥 <span id="streakCount">0</span></span>
+</div>
+
 <button class="random-button" onclick="pickRandomProblem()">Pick Random Problem</button>
 
 <div class="container" id="categories">
@@ -230,6 +267,7 @@
 </div>
 
 <div class="dialog" id="randomDialog">
+    <button class="close-button" onclick="closeRandomDialog()">X</button>
     <h2>Random Problem</h2>
     <p id="randomProblem"></p>
     <span id="randomDifficulty" class="difficulty"></span>
@@ -412,6 +450,13 @@
     const randomProblemElement = document.getElementById('randomProblem');
     const randomDifficultyElement = document.getElementById('randomDifficulty');
     const randomLink = document.getElementById('randomLink');
+    const streakCountElement = document.getElementById('streakCount');
+
+    let streak = localStorage.getItem('streak') || 0;
+    let lastActiveDate = localStorage.getItem('lastActiveDate') || new Date().toISOString().split('T')[0];
+
+    // Update streak count on page load
+    updateStreak();
 
     categories.forEach(category => {
         const categoryDiv = document.createElement('div');
@@ -453,6 +498,9 @@
             checkbox.checked = localStorage.getItem(`problem-${category.name}-${index}`) === 'true';
             checkbox.addEventListener('change', () => {
                 localStorage.setItem(`problem-${category.name}-${index}`, checkbox.checked);
+                updateCategoryProgress(categoryDiv, category.problems);
+                // Track streak update only if the user solved at least one problem
+                updateStreak(true);
             });
 
             problemStatus.appendChild(difficulty);
@@ -467,6 +515,12 @@
         container.appendChild(categoryDiv);
     });
 
+    function updateCategoryProgress(categoryDiv, problems) {
+        const solvedProblems = problems.filter(problem => localStorage.getItem(`problem-${categoryDiv.querySelector('h2').textContent}-${problems.indexOf(problem)}`) === 'true');
+        const progressPercentage = (solvedProblems.length / problems.length) * 100;
+        categoryDiv.querySelector('.progress-bar').style.width = `${progressPercentage}%`;
+    }
+
     function pickRandomProblem() {
         const allProblems = categories.flatMap(category => category.problems);
         const randomIndex = Math.floor(Math.random() * allProblems.length);
@@ -478,6 +532,23 @@
         randomLink.href = randomProblem.link;
 
         randomDialog.style.display = 'block';
+    }
+
+    function closeRandomDialog() {
+        randomDialog.style.display = 'none';
+    }
+
+    function updateStreak(solvedToday = false) {
+        const today = new Date().toISOString().split('T')[0];
+        if (today !== lastActiveDate) {
+            lastActiveDate = today;
+            if (solvedToday) {
+                streak++;
+            }
+            localStorage.setItem('lastActiveDate', today);
+            localStorage.setItem('streak', streak);
+        }
+        streakCountElement.textContent = streak;
     }
 </script>
 
