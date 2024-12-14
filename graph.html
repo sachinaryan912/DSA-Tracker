@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph Problems</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background-color: #121212;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 36px;
+            font-weight: 700;
+            color: #00FF96;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .neon-button {
+            background-color: #00FF96;
+            color: #121212;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 255, 150, 0.5), 0 0 30px rgba(0, 255, 150, 0.7);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .neon-button:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 150, 1), 0 0 40px rgba(0, 255, 150, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .neon-button i {
+            margin-right: 10px;
+        }
+
+        .problem-info {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .solve-now {
+            margin-top: 20px;
+            background-color: #00FF96;
+            color: #121212;
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 255, 150, 0.5), 0 0 30px rgba(0, 255, 150, 0.7);
+            transition: 0.3s;
+        }
+
+        .solve-now:hover {
+            box-shadow: 0 0 20px rgba(0, 255, 150, 1), 0 0 40px rgba(0, 255, 150, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        /* Particles.js container */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .graph-info {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .graph-info h2 {
+            font-size: 24px;
+            color: #00FF96;
+        }
+
+        .graph-info p{
+            font-size: 16px;
+        }
+
+        .graph-info ul{
+            font-size: 16px;
+            list-style: none;
+        }
+
+        .graph-info ul li strong{
+            color: #00FF96;
+        }
+
+        
+    </style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <h1>Graph</h1>
+
+     <!-- Graph DSA Explanation -->
+     <div class="graph-info">
+        <h2>Graph [ Data Structures & Algorithms ]</h2>
+        <p>A graph is a non-linear data structure consisting of nodes (vertices) and edges (connections) between the nodes. Graphs are widely used to represent various real-world problems such as networks, social media, and routing problems.</p>
+        <ul>
+            <li><strong>Types of Graphs:</strong> 
+                <ul>
+                    <li>Directed Graphs (Edges have a direction)</li>
+                    <li>Undirected Graphs (Edges have no direction)</li>
+                    <li>Weighted Graphs (Edges have weights or costs)</li>
+                    <li>Unweighted Graphs (Edges have no weights)</li>
+                    <li>Complete Graphs (Every pair of vertices is connected)</li>
+                </ul>
+            </li>
+            
+                </ul>
+            </li>
+        </ul>
+    </div>
+    
+    <div class="button-container">
+        <button class="neon-button" id="pickRandomBtn">
+            <i class="fa fa-random"></i> Pick Random
+        </button>
+    </div>
+
+    <div class="problem-info hidden" id="problemInfo">
+        <p id="problemName"></p>
+        <button class="solve-now" id="solveNowBtn">Solve Now</button>
+    </div>
+
+    <!-- Particles.js background -->
+    <div id="particles-js"></div>
+
+   
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Particles.js Configuration
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#00FF96'
+                },
+                shape: {
+                    type: 'circle',
+                    stroke: {
+                        width: 0,
+                        color: '#00FF96'
+                    },
+                    polygon: {
+                        nb_sides: 5
+                    }
+                },
+                opacity: {
+                    value: 0.5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 1,
+                        opacity_min: 0.1,
+                        sync: false
+                    }
+                },
+                size: {
+                    value: 5,
+                    random: true,
+                    anim: {
+                        enable: true,
+                        speed: 40,
+                        size_min: 0.1,
+                        sync: false
+                    }
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#00FF96',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    attract: {
+                        enable: false
+                    }
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'repulse'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    }
+                }
+            },
+            retina_detect: true
+        });
+
+        const problems = [
+            { "problem_name": "BFS Traversal of Graph", "problem_link": "https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1" },
+            { "problem_name": "Depth First Traversal for a Graph", "problem_link": "https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1" },
+            { "problem_name": "Detect Cycle in an Undirected Graph", "problem_link": "https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1" },
+            { "problem_name": "Detect Cycle in a Directed Graph", "problem_link": "https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1" },
+            { "problem_name": "Topological Sort", "problem_link": "https://www.geeksforgeeks.org/problems/topological-sort/1" },
+            { "problem_name": "Bipartite Graph", "problem_link": "https://www.geeksforgeeks.org/problems/bipartite-graph/1" },
+            { "problem_name": "Covid Spread", "problem_link": "https://www.geeksforgeeks.org/problems/covid-spread--141631/1" },
+            { "problem_name": "Replace O's with X's", "problem_link": "https://www.geeksforgeeks.org/problems/replace-os-with-xs0052/1?page=2&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Find the Number of Islands", "problem_link": "https://www.geeksforgeeks.org/problems/find-the-number-of-islands/1" },
+            { "problem_name": "Prerequisite Tasks", "problem_link": "https://www.geeksforgeeks.org/problems/prerequisite-tasks/1?page=2&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Course Schedule", "problem_link": "https://www.geeksforgeeks.org/problems/course-schedule/1?page=2&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Alien Dictionary", "problem_link": "https://www.geeksforgeeks.org/problems/alien-dictionary/1?page=1&difficulty%5B%5D=2&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Parallel Courses III", "problem_link": "https://leetcode.com/problems/parallel-courses-iii/description/" },
+            { "problem_name": "Shortest Path in Undirected Graph Having Unit Distance", "problem_link": "https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph-having-unit-distance/1" },
+            { "problem_name": "Shortest Path in an Unweighted Graph", "problem_link": "https://www.naukri.com/code360/problems/shortest-path-in-an-unweighted-graph_981297?leftPanelTabValue=PROBLEM" },
+            { "problem_name": "Shortest Path in Undirected Graph", "problem_link": "https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/1" },
+            { "problem_name": "Implementing Dijkstra (Set 1: Adjacency Matrix)", "problem_link": "https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1?page=1&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Shortest Path in Weighted Undirected Graph", "problem_link": "https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-graph/1" },
+            { "problem_name": "Distance from the Source (Bellman-Ford Algorithm)", "problem_link": "https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1" },
+            { "problem_name": "Implementing Floyd Warshall", "problem_link": "https://www.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1?itm_source=geeksforgeeks&itm_medium=article&itm_campaign=bottom_sticky_on_article" },
+            { "problem_name": "Knight Walk", "problem_link": "https://www.geeksforgeeks.org/problems/knight-walk4521/1?page=2&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Shortest Source to Destination Path", "problem_link": "https://www.geeksforgeeks.org/problems/shortest-source-to-destination-path3544/1?page=1&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" },
+            { "problem_name": "Find Whether Path Exists", "problem_link": "https://www.geeksforgeeks.org/problems/find-whether-path-exist5238/1?page=1&difficulty%5B%5D=1&category%5B%5D=Graph&sortBy=submissions" }
+        ];
+
+        const pickRandomBtn = document.getElementById('pickRandomBtn');
+        const problemInfo = document.getElementById('problemInfo');
+        const problemNameElem = document.getElementById('problemName');
+        const solveNowBtn = document.getElementById('solveNowBtn');
+
+        pickRandomBtn.addEventListener('click', () => {
+            const randomIndex = Math.floor(Math.random() * problems.length);
+            const randomProblem = problems[randomIndex];
+            
+            problemNameElem.textContent = randomProblem.problem_name;
+            solveNowBtn.onclick = () => {
+                window.open(randomProblem.problem_link, '_blank');
+            };
+
+            problemInfo.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>

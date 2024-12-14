@@ -262,6 +262,8 @@
 
 <button class="random-button" onclick="pickRandomProblem()">Pick Random Problem</button>
 
+<button class="random-button" onclick="openPage()">Graph discussion</button>
+
 <div class="container" id="categories">
     <!-- Categories and problems will be populated here by JavaScript -->
 </div>
@@ -281,6 +283,9 @@
 </footer>
 
 <script>
+    function openPage() {
+            window.location.href = './graph.html';  // Ensure this is the correct relative path
+        }
     const categories = [
     {
         name: 'Arrays',
@@ -457,6 +462,8 @@
 
     // Update streak count on page load
     updateStreak();
+
+ 
 
     categories.forEach(category => {
         const categoryDiv = document.createElement('div');
